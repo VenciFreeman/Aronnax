@@ -1,19 +1,26 @@
----
-19/11/06 微电子楼105 刘婷
----
-
 # 目标检测与模型压缩 概述
-
-[TOC]
+`19/11/06 微电子楼105 刘婷`
 
 ## **计算机视觉(CV)**
 
 ### 基本框架
 
 - 视觉基础
+  - 神经生理学、认知科学
+  - 色度学、光学
+  - 射影几何、矩阵理论
 - 底层处理
+  - 空域图像处理
+  - 频域图像处理
+  - 图像特征提取
 - 中层处理
+  - 图像分割
+  - 相机标定
+  - 深度估计
+  - 运动估计
 - 高层处理
+  - 三维重建
+  - 目标识别
 
 ### 视觉形成的三个阶段
 
@@ -36,20 +43,24 @@
 ### 目标检测算法分类
 
 - 传统的目标检测算法
-  - Cascade
-  - HOG/DPM
-  - Haar/SVM
+  - Cascade + HOG/DPM + Haar/SVM以及诸多改进优化
 - 候选区域/框+深度学习分类
-  - R-CNN
+  - R-CNN(Selective Search + CNN + SVM)
+  - SPP-net(ROI Pooling)
+  - Fast R-CNN(Selective Search + CNN + ROI)
+  - Faster R-CNN(RPN + CNN + ROI)
+  - R-FCN
 - 基于深度学习的回归方法
-  - YOLO
+  - YOLO/SSD/DenseBox等方法
+  - 最近出现的结合RNN算法的RRC detection
+  - 结合DPM的Deformable CNN
 
 #### 传统的目标检测算法
 
 ##### 直方图技术
 
 - 背景明显对比
-- 含有双峰的灰度直方图对应像素点
+- 含有双峰的灰度直方图对应像素点，两个尖峰对应于物体内部和外部较多数目的点，两峰间的谷对应于物体边缘附近相对较少数目的点
 - 使用直方图确定灰度阈值的值
 - 泛化能力差(不能很好地拟合以前未见过的新数据 )
 
@@ -62,7 +73,8 @@
     - image -> conv layers ->  spatial pyramid pooling -> fc layers -> output
   - Fast R-CNN
     - 最后一个卷积层后加一个ROI pooling layer
-    - 损失函数使用了多任务损失函数
+    - 损失函数使用了多任务损失函数(multi-task loss)
+    - 将边框回归Bounding Box Regression直接加入到CNN网络中训练
   - Faster R-CNN
     - 最后一个卷积层后，即生成候选框时再加一个RPN结构，直接训练得到候选区域
   - R-CNN: 50s -> Fast R-CNN: 2s -> Faster R-CNN: 0.2s，精度基本不变
